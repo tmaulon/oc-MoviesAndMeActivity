@@ -2,19 +2,18 @@
 
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import FilmList from "./FilmList";
+import FilmSeenList from "./FilmSeenList";
 import { connect } from "react-redux";
 
 class Seen extends React.Component {
   render() {
-    console.log("films vus => ", this.props);
-
     return (
       <View style={styles.main_container}>
-        <FilmList
+        <FilmSeenList
           films={this.props.seenFilm}
           navigation={this.props.navigation}
           seenList={true}
+          favoriteList={false}
         />
       </View>
     );
@@ -24,9 +23,6 @@ class Seen extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1
-  },
-  avatar_container: {
-    alignItems: "center"
   }
 });
 

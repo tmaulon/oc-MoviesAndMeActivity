@@ -1,36 +1,36 @@
 // Components/News.js
 
-import React from 'react'
-import { } from 'react-native'
-import FilmList from './FilmList'
-import { getBestFilmsFromApi } from '../API/TMDBApi'
+import React from "react";
+import {} from "react-native";
+import FilmList from "./FilmList";
+import { getBestFilmsFromApi } from "../API/TMDBApi";
 
 class News extends React.Component {
   constructor(props) {
-    super(props)
-    this.page = 0
-    this.totalPages = 0
+    super(props);
+    this.page = 0;
+    this.totalPages = 0;
     this.state = {
       films: [],
       isLoading: false
-    }
-    this._loadFilms = this._loadFilms.bind(this)
+    };
+    this._loadFilms = this._loadFilms.bind(this);
   }
 
   componentDidMount() {
-    this._loadFilms()
+    this._loadFilms();
   }
 
   _loadFilms() {
-    this.setState({ isLoading: true })
-    getBestFilmsFromApi(this.page+1).then(data => {
-        this.page = data.page
-        this.totalPages = data.total_pages
-        this.setState({
-          films: [ ...this.state.films, ...data.results ],
-          isLoading: false
-        })
-    })
+    this.setState({ isLoading: true });
+    getBestFilmsFromApi(this.page + 1).then(data => {
+      this.page = data.page;
+      this.totalPages = data.total_pages;
+      this.setState({
+        films: [...this.state.films, ...data.results],
+        isLoading: false
+      });
+    });
   }
 
   render() {
@@ -42,9 +42,10 @@ class News extends React.Component {
         page={this.page}
         totalPages={this.totalPages}
         favoriteList={false}
+        seenList={false}
       />
-    )
+    );
   }
 }
 
-export default News
+export default News;

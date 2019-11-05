@@ -1,11 +1,11 @@
-// Components/FilmList.js
+// Components/FilmSeenList.js
 
 import React from "react";
 import { StyleSheet, FlatList } from "react-native";
-import FilmItem from "./FilmItem";
+import FilmSeenItem from "./FilmSeenItem";
 import { connect } from "react-redux";
 
-class FilmList extends React.Component {
+class FilmSeenList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +26,7 @@ class FilmList extends React.Component {
         extraData={(this.props.favoritesFilm, this.props.seenFilm)}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <FilmItem
+          <FilmSeenItem
             film={item}
             isFilmFavorite={
               this.props.favoritesFilm.findIndex(
@@ -71,4 +71,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(FilmList);
+export default connect(mapStateToProps)(FilmSeenList);
