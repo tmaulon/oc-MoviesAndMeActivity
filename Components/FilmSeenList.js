@@ -34,12 +34,12 @@ class FilmSeenList extends React.Component {
               ) !== -1
                 ? true
                 : false
-            } // Bonus pour différencier les films déjà présent dans notre state global et qui n'ont donc pas besoin d'être récupérés depuis l'API
+            }
             isFilmSeen={
               this.props.seenFilm.findIndex(film => film.id === item.id) !== -1
                 ? true
                 : false
-            } // Pour différencier les films déjà présent dans notre state global et qui n'ont donc pas besoin d'être récupérés depuis l'API
+            }
             displayDetailForFilm={this._displayDetailForFilm}
           />
         )}
