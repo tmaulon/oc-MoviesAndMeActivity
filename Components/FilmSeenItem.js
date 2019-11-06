@@ -1,27 +1,48 @@
 // Components/FilmSeenItem.js
 
 import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { getImageFromApi } from "../API/TMDBApi";
 import FadeIn from "../Animations/FadeIn";
 
 class FilmSeenItem extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      toggle: false
+    };
   }
+
+  _setToggled() {
+    this.setState({
+      toggle: !this.state.toggle
+    });
+  }
+
   render() {
     const { film, displayDetailForFilm } = this.props;
+
+    const textHandler = this.state.toggle
+      ? "Sorti le " +
+        film.release_date
+          .split("-")
+          .reverse()
+          .join("/")
+      : film.title;
+
     return (
       <FadeIn>
         <TouchableOpacity
           style={styles.main_container}
           onPress={() => displayDetailForFilm(film.id)}
+          onLongPress={() => this._setToggled()}
+          onPressOut={() => this._setToggled()}
         >
           <Image
             style={styles.image}
             source={{ uri: getImageFromApi(film.poster_path) }}
           />
-          <Text style={styles.title_text}>{film.title}</Text>
+          <Text style={styles.title_text}>{textHandler}</Text>
         </TouchableOpacity>
       </FadeIn>
     );
