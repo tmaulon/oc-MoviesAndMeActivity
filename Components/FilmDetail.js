@@ -145,13 +145,17 @@ class FilmDetail extends React.Component {
             style={styles.image}
             source={{ uri: getImageFromApi(film.backdrop_path) }}
           />
-          <Text style={styles.title_text}>{film.title}</Text>
-          <TouchableOpacity
-            style={styles.favorite_container}
-            onPress={() => this._toggleFavorite()}
-          >
-            {this._displayFavoriteImage()}
-          </TouchableOpacity>
+          <View style={styles.header_container}>
+            <View>
+              <TouchableOpacity
+                style={styles.favorite_container}
+                onPress={() => this._toggleFavorite()}
+              >
+                {this._displayFavoriteImage()}
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.title_text}>{film.title}</Text>
+          </View>
           <Text style={styles.description_text}>{film.overview}</Text>
           <Text style={styles.default_text}>
             Sorti le {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
@@ -263,20 +267,28 @@ const styles = StyleSheet.create({
     height: 169,
     margin: 5
   },
+  header_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
   title_text: {
     fontWeight: "bold",
-    fontSize: 35,
+    fontSize: 20,
     flex: 1,
     flexWrap: "wrap",
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    marginBottom: 10,
     color: "#000000",
     textAlign: "center"
   },
   favorite_container: {
     alignItems: "center"
+  },
+  favorite_image: {
+    flex: 1,
+    width: null,
+    height: null
   },
   description_text: {
     fontStyle: "italic",
@@ -288,11 +300,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 5
-  },
-  favorite_image: {
-    flex: 1,
-    width: null,
-    height: null
   },
   share_touchable_floatingactionbutton: {
     position: "absolute",
