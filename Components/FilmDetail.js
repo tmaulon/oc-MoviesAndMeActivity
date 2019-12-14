@@ -168,7 +168,7 @@ class FilmDetail extends React.Component {
           <Text style={styles.default_text}>
             Genre(s) :{" "}
             {film.genres
-              .map(function(genre) {
+              .map(function (genre) {
                 return genre.name;
               })
               .join(" / ")}
@@ -176,7 +176,7 @@ class FilmDetail extends React.Component {
           <Text style={styles.default_text}>
             Companie(s) :{" "}
             {film.production_companies
-              .map(function(company) {
+              .map(function (company) {
                 return company.name;
               })
               .join(" / ")}
@@ -298,10 +298,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 60,
     height: 60,
-    right: 30,
-    bottom: 40,
+    right: 10,
+    bottom: 50,
     borderRadius: 30,
-    backgroundColor: "#e91e63",
+    backgroundColor: "#0000ff",
     justifyContent: "center",
     alignItems: "center"
   },
