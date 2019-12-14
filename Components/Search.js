@@ -5,13 +5,14 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   Text,
   FlatList,
   ActivityIndicator
 } from "react-native";
 import FilmItem from "./FilmItem";
 import FilmList from "./FilmList";
+import CustomButton from "./CustomButton";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
 
 class Search extends React.Component {
@@ -84,14 +85,17 @@ class Search extends React.Component {
           onChangeText={text => this._searchTextInputChanged(text)}
           onSubmitEditing={() => this._searchFilms()}
         />
-        <Button title="Rechercher" onPress={() => this._searchFilms()} />
+        <CustomButton
+          handleOnPress={() => this._searchFilms()}
+          text={"Rechercher"}
+        />
         <FilmList
           films={this.state.films}
           navigation={this.props.navigation}
           loadFilms={this._loadFilms}
           page={this.page}
           totalPages={this.totalPages}
-          favoriteList={false} // Ici j'ai simplement ajouté un booléen à false pour indiquer qu'on n'est pas dans le cas de l'affichage de la liste des films favoris. Et ainsi pouvoir déclencher le chargement de plus de films lorsque l'utilisateur scrolle.
+          favoriteList={false}
           seenList={false}
         />
         {this._displayLoading()}
@@ -105,11 +109,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   textinput: {
-    marginLeft: 5,
-    marginRight: 5,
+    margin: 20,
     height: 50,
-    borderColor: "#000000",
-    borderWidth: 1,
+    borderBottomColor: "#ededed",
+    borderBottomWidth: 1,
     paddingLeft: 5
   },
   loading_container: {
