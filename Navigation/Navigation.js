@@ -17,7 +17,7 @@ const SearchStackNavigator = createStackNavigator({
   Search: {
     screen: Search,
     navigationOptions: {
-      title: "Rechercher"
+      title: "Movies And Me"
     }
   },
   FilmDetail: {
