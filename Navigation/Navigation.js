@@ -135,16 +135,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-  stackNavigator: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#fff",
-    backgroundColor: "#0000ff",
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center"
-  }
 });
 
 export default createAppContainer(MoviesTabNavigator);
