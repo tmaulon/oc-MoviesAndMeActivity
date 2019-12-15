@@ -30,10 +30,10 @@ class EnlargeShrink extends React.Component {
 
   render() {
     return (
-        <Animated.View
-          style={{ width: this.state.viewSize, height: this.state.viewSize }}>
-          {this.props.children}
-        </Animated.View>
+      <Animated.View
+        style={{ width: this.state.viewSize, height: this.state.viewSize }}>
+        {this.props.children}
+      </Animated.View>
     )
   }
 }

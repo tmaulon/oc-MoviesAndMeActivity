@@ -14,7 +14,6 @@ import FilmItem from "./FilmItem";
 import FilmList from "./FilmList";
 import CustomButton from "./CustomButton";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
-
 class Search extends React.Component {
   constructor(props) {
     super(props);

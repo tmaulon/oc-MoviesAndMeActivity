@@ -19,6 +19,7 @@ import moment from "moment";
 import numeral from "numeral";
 import { connect } from "react-redux";
 import EnlargeShrink from "../Animations/EnlargeShrink";
+import Icon from "react-native-vector-icons/AntDesign";
 
 class FilmDetail extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -108,19 +109,19 @@ class FilmDetail extends React.Component {
   }
 
   _displayFavoriteImage() {
-    var sourceImage = require("../Images/ic_favorite_border.png");
+    var iconName = "hearto";
     var shouldEnlarge = false; // Par défaut, si le film n'est pas en favoris, on veut qu'au clic sur le bouton, celui-ci s'agrandisse => shouldEnlarge à true
     if (
       this.props.favoritesFilm.findIndex(
         item => item.id === this.state.film.id
       ) !== -1
     ) {
-      sourceImage = require("../Images/ic_favorite.png");
+      iconName = "heart";
       shouldEnlarge = true; // Si le film est dans les favoris, on veut qu'au clic sur le bouton, celui-ci se rétrécisse => shouldEnlarge à false
     }
     return (
       <EnlargeShrink shouldEnlarge={shouldEnlarge}>
-        <Image style={styles.favorite_image} source={sourceImage} />
+        <Icon style={styles.favorite_image} name={iconName} size={shouldEnlarge ? 40 : 30} color="#0000ff" />
       </EnlargeShrink>
     );
   }
@@ -287,8 +288,6 @@ const styles = StyleSheet.create({
   },
   favorite_image: {
     flex: 1,
-    width: null,
-    height: null
   },
   description_text: {
     fontStyle: "italic",
