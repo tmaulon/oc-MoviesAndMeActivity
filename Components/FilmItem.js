@@ -7,7 +7,7 @@ import FadeIn from '../Animations/FadeIn'
 
 class FilmItem extends React.Component {
 
-  _displayFavoriteImage() {
+  _displayFavoriteIcon() {
     if (this.props.isFilmFavorite) {
       // Si la props isFilmFavorite vaut true, on affiche le 🖤
       return (
@@ -28,11 +28,11 @@ class FilmItem extends React.Component {
           onPress={() => displayDetailForFilm(film.id)}>
           <Image
             style={styles.image}
-            source={{uri: getImageFromApi(film.poster_path)}}
+            source={{ uri: getImageFromApi(film.poster_path) }}
           />
           <View style={styles.content_container}>
             <View style={styles.header_container}>
-              {this._displayFavoriteImage()}
+              {this._displayFavoriteIcon()}
               <Text style={styles.title_text}>{film.title}</Text>
               <Text style={styles.vote_text}>{film.vote_average}</Text>
             </View>

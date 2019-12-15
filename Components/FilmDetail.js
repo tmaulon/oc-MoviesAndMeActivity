@@ -19,7 +19,7 @@ import moment from "moment";
 import numeral from "numeral";
 import { connect } from "react-redux";
 import EnlargeShrink from "../Animations/EnlargeShrink";
-import Icon from "react-native-vector-icons/AntDesign";
+import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 class FilmDetail extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -108,7 +108,7 @@ class FilmDetail extends React.Component {
     this.props.dispatch(action);
   }
 
-  _displayFavoriteImage() {
+  _displayFavoriteIcon() {
     var iconName = "hearto";
     var shouldEnlarge = false; // Par défaut, si le film n'est pas en favoris, on veut qu'au clic sur le bouton, celui-ci s'agrandisse => shouldEnlarge à true
     if (
@@ -121,8 +121,31 @@ class FilmDetail extends React.Component {
     }
     return (
       <EnlargeShrink shouldEnlarge={shouldEnlarge}>
-        <Icon style={styles.favorite_image} name={iconName} size={shouldEnlarge ? 40 : 30} color="#0000ff" />
+        <AntDesignIcon style={styles.header_buttons_icons} name={iconName} size={shouldEnlarge ? 40 : 30} color="#0000ff" />
       </EnlargeShrink>
+    );
+  }
+  _displaySeenIcon() {
+    var iconName = "eyeo";
+    var shouldEnlarge = false; // Par défaut, si le film n'est pas en favoris, on veut qu'au clic sur le bouton, celui-ci s'agrandisse => shouldEnlarge à true
+    if (
+      this.props.seenFilm.findIndex(
+        item => item.id === this.state.film.id
+      ) !== -1
+    ) {
+      iconName = "eye";
+      shouldEnlarge = true; // Si le film est dans les favoris, on veut qu'au clic sur le bouton, celui-ci se rétrécisse => shouldEnlarge à false
+    }
+    return (
+      <EnlargeShrink shouldEnlarge={shouldEnlarge}>
+        <AntDesignIcon style={styles.header_buttons_icons} name={iconName} size={shouldEnlarge ? 40 : 30} color="#0000ff" />
+      </EnlargeShrink>
+    );
+  }
+  _displayShareIcon() {
+    var iconName = "sharealt";
+    return (
+      <AntDesignIcon style={styles.header_buttons_icons} name={iconName} size={30} color="#0000ff" />
     );
   }
 
@@ -147,15 +170,29 @@ class FilmDetail extends React.Component {
             source={{ uri: getImageFromApi(film.backdrop_path) }}
           />
           <View style={styles.header_container}>
-            <View>
-              <TouchableOpacity
-                style={styles.favorite_container}
-                onPress={() => this._toggleFavorite()}
-              >
-                {this._displayFavoriteImage()}
-              </TouchableOpacity>
-            </View>
             <Text style={styles.title_text}>{film.title}</Text>
+            <View style={styles.header_buttons_container}>
+              <View style={styles.header_button_container}>
+                <TouchableOpacity style={styles.header_button}
+                  onPress={() => this._toggleFavorite()}
+                >
+                  {this._displayFavoriteIcon()}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.header_button}
+                  onPress={() => this._toggleSeen()}
+                >
+                  {this._displaySeenIcon()}
+                </TouchableOpacity>
+              </View>
+              <View
+                style={styles.header_button_share_container}>
+                <TouchableOpacity
+                  onPress={() => this._shareFilm()}
+                >
+                  {this._displayShareIcon()}
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
           <Text style={styles.description_text}>{film.overview}</Text>
           <Text style={styles.default_text}>
@@ -269,24 +306,35 @@ const styles = StyleSheet.create({
     margin: 5
   },
   header_container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
     marginBottom: 10,
     paddingHorizontal: 20,
   },
   title_text: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 30,
     flex: 1,
     flexWrap: "wrap",
     color: "#000000",
-    textAlign: "center"
+    textAlign: "left"
   },
-  favorite_container: {
-    alignItems: "center"
+  header_buttons_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flex: 1,
   },
-  favorite_image: {
+  header_button_container: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flex: 1,
+  },
+  header_button: {
+    alignItems: "center",
+  },
+  header_button_share_container: {
+    alignItems: "flex-end",
+  },
+  header_buttons_icons: {
     flex: 1,
   },
   description_text: {
