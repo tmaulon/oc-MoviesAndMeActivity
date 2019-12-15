@@ -194,35 +194,56 @@ class FilmDetail extends React.Component {
               </View>
             </View>
           </View>
-          <Text style={styles.description_text}>{film.overview}</Text>
-          <Text style={styles.default_text}>
-            Sorti le {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
-          </Text>
-          <Text style={styles.default_text}>
-            Note : {film.vote_average} / 10
-          </Text>
-          <Text style={styles.default_text}>
-            Nombre de votes : {film.vote_count}
-          </Text>
-          <Text style={styles.default_text}>
-            Budget : {numeral(film.budget).format("0,0[.]00 $")}
-          </Text>
-          <Text style={styles.default_text}>
-            Genre(s) :{" "}
-            {film.genres
-              .map(function (genre) {
-                return genre.name;
-              })
-              .join(" / ")}
-          </Text>
-          <Text style={styles.default_text}>
-            Companie(s) :{" "}
-            {film.production_companies
-              .map(function (company) {
-                return company.name;
-              })
-              .join(" / ")}
-          </Text>
+          <View style={styles.infos_container}>
+            <Text style={styles.default_text}>
+              Note : {" "}
+              <Text style={styles.info_text}>
+                {film.vote_average} / 10
+            </Text>
+            </Text>
+            <Text style={styles.default_text}>
+              Nombre de votes : {" "}
+              <Text style={styles.info_text}>
+                {film.vote_count}
+              </Text>
+            </Text>
+            <Text style={styles.default_text}>
+              Sorti le {" "}
+              <Text style={styles.info_text}>
+                {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
+              </Text>
+            </Text>
+            <Text style={styles.default_text}>
+              Budget : {" "}
+              <Text style={styles.info_text}>
+                {numeral(film.budget).format("0,0[.]00 $")}
+              </Text>
+            </Text>
+            <Text style={styles.default_text}>
+              Genre(s) : {" "}
+              <Text style={styles.info_text}>
+                {film.genres
+                  .map(function (genre) {
+                    return genre.name;
+                  })
+                  .join(" / ")}
+              </Text>
+            </Text>
+            <Text style={styles.default_text}>
+              Companie(s) : {" "}
+              <Text style={styles.info_text}>
+                {film.production_companies
+                  .map(function (company) {
+                    return company.name;
+                  })
+                  .join(" / ")}
+              </Text>
+            </Text>
+          </View>
+          <View style={styles.description_container}>
+            <Text style={styles.subtitle_text}>Resumé</Text>
+            <Text style={styles.description_text}>{film.overview}</Text>
+          </View>
         </ScrollView>
       );
     }
@@ -309,9 +330,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 20,
   },
+  infos_container: {
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
+  description_container: {
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
   title_text: {
     fontWeight: "bold",
     fontSize: 30,
+    flex: 1,
+    flexWrap: "wrap",
+    color: "#000000",
+    textAlign: "left"
+  },
+  subtitle_text: {
+    fontWeight: "bold",
+    fontSize: 20,
     flex: 1,
     flexWrap: "wrap",
     color: "#000000",
@@ -347,6 +384,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 5
+  },
+  info_text: {
+    fontWeight: "bold",
   },
   share_touchable_floatingactionbutton: {
     position: "absolute",
