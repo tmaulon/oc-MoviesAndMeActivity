@@ -12,7 +12,8 @@ import {
   Share,
   Alert,
   Platform,
-  Button
+  Button,
+  Animated
 } from "react-native";
 import { getFilmDetailFromApi, getImageFromApi } from "../API/TMDBApi";
 import moment from "moment";
@@ -45,7 +46,8 @@ class FilmDetail extends React.Component {
     super(props);
     this.state = {
       film: undefined,
-      isLoading: false
+      isLoading: false,
+      scrollOffset: new Animated.Value(0),
     };
 
     this._toggleFavorite = this._toggleFavorite.bind(this);
@@ -125,6 +127,7 @@ class FilmDetail extends React.Component {
       </EnlargeShrink>
     );
   }
+
   _displaySeenIcon() {
     var iconName = "eyeo";
     var shouldEnlarge = false; // Par défaut, si le film n'est pas en favoris, on veut qu'au clic sur le bouton, celui-ci s'agrandisse => shouldEnlarge à true
@@ -142,6 +145,7 @@ class FilmDetail extends React.Component {
       </EnlargeShrink>
     );
   }
+
   _displayShareIcon() {
     var iconName = "sharealt";
     return (
@@ -162,89 +166,113 @@ class FilmDetail extends React.Component {
 
   _displayFilm() {
     const { film } = this.state;
+    // Utilisation d'Animated.event pour mettre à jour scrollOffset lors de l'évènement onScroll
+    const scrollEvent = Animated.event(
+      [{ nativeEvent: { contentOffset: { y: this.state.scrollOffset } } }],
+      { useNativeDriver: true }
+    );
+
     if (film != undefined) {
       return (
-        <ScrollView style={styles.scrollview_container}>
-          <Image
-            style={styles.image}
-            source={{ uri: getImageFromApi(film.backdrop_path) }}
-          />
-          <View style={styles.header_container}>
-            <Text style={styles.title_text}>{film.title}</Text>
-            <View style={styles.header_buttons_container}>
-              <View style={styles.header_button_container}>
-                <TouchableOpacity style={styles.header_button}
-                  onPress={() => this._toggleFavorite()}
-                >
-                  {this._displayFavoriteIcon()}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.header_button}
-                  onPress={() => this._toggleSeen()}
-                >
-                  {this._displaySeenIcon()}
-                </TouchableOpacity>
-              </View>
-              <View
-                style={styles.header_button_share_container}>
-                <TouchableOpacity
-                  onPress={() => this._shareFilm()}
-                >
-                  {this._displayShareIcon()}
-                </TouchableOpacity>
+        <Animated.ScrollView
+          style={styles.scrollview_container}
+          // Mis à jour de scrollOffset sur l'évènement onScroll
+          onScroll={scrollEvent}
+          // scrollEventThrottle={1} est nécessaire afin d'être notifié de tous les évènements de défilement
+          scrollEventThrottle={1}>
+          <Animated.View style={
+            // [
+            // styles.image_header_wrapper,
+            {
+              height: 400,
+              transform: [{ translateY: this.state.scrollOffset }],
+              zIndex: 100, // zIndex est utilisé pour que l'entête soit toujours au dessus du contenu
+            }
+            // ]
+          }>
+            <Image
+              style={styles.image_header}
+              source={{ uri: getImageFromApi(film.backdrop_path) }}
+            />
+          </Animated.View>
+          <View style={{ padding: 20 }}>
+            <View style={styles.header_container}>
+              <Text style={styles.title_text}>{film.title}</Text>
+              <View style={styles.header_buttons_container}>
+                <View style={styles.header_button_container}>
+                  <TouchableOpacity style={styles.header_button}
+                    onPress={() => this._toggleFavorite()}
+                  >
+                    {this._displayFavoriteIcon()}
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.header_button}
+                    onPress={() => this._toggleSeen()}
+                  >
+                    {this._displaySeenIcon()}
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={styles.header_button_share_container}>
+                  <TouchableOpacity
+                    onPress={() => this._shareFilm()}
+                  >
+                    {this._displayShareIcon()}
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
+            <View style={styles.infos_container}>
+              <Text style={styles.default_text}>
+                Note : {" "}
+                <Text style={styles.info_text}>
+                  {film.vote_average} / 10
+            </Text>
+              </Text>
+              <Text style={styles.default_text}>
+                Nombre de votes : {" "}
+                <Text style={styles.info_text}>
+                  {film.vote_count}
+                </Text>
+              </Text>
+              <Text style={styles.default_text}>
+                Sorti le {" "}
+                <Text style={styles.info_text}>
+                  {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
+                </Text>
+              </Text>
+              <Text style={styles.default_text}>
+                Budget : {" "}
+                <Text style={styles.info_text}>
+                  {numeral(film.budget).format("0,0[.]00 $")}
+                </Text>
+              </Text>
+              <Text style={styles.default_text}>
+                Genre(s) : {" "}
+                <Text style={styles.info_text}>
+                  {film.genres
+                    .map(function (genre) {
+                      return genre.name;
+                    })
+                    .join(" / ")}
+                </Text>
+              </Text>
+              <Text style={styles.default_text}>
+                Companie(s) : {" "}
+                <Text style={styles.info_text}>
+                  {film.production_companies
+                    .map(function (company) {
+                      return company.name;
+                    })
+                    .join(" / ")}
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.description_container}>
+              <Text style={styles.subtitle_text}>Resumé</Text>
+              <Text style={styles.description_text}>{film.overview}</Text>
+            </View>
           </View>
-          <View style={styles.infos_container}>
-            <Text style={styles.default_text}>
-              Note : {" "}
-              <Text style={styles.info_text}>
-                {film.vote_average} / 10
-            </Text>
-            </Text>
-            <Text style={styles.default_text}>
-              Nombre de votes : {" "}
-              <Text style={styles.info_text}>
-                {film.vote_count}
-              </Text>
-            </Text>
-            <Text style={styles.default_text}>
-              Sorti le {" "}
-              <Text style={styles.info_text}>
-                {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
-              </Text>
-            </Text>
-            <Text style={styles.default_text}>
-              Budget : {" "}
-              <Text style={styles.info_text}>
-                {numeral(film.budget).format("0,0[.]00 $")}
-              </Text>
-            </Text>
-            <Text style={styles.default_text}>
-              Genre(s) : {" "}
-              <Text style={styles.info_text}>
-                {film.genres
-                  .map(function (genre) {
-                    return genre.name;
-                  })
-                  .join(" / ")}
-              </Text>
-            </Text>
-            <Text style={styles.default_text}>
-              Companie(s) : {" "}
-              <Text style={styles.info_text}>
-                {film.production_companies
-                  .map(function (company) {
-                    return company.name;
-                  })
-                  .join(" / ")}
-              </Text>
-            </Text>
-          </View>
-          <View style={styles.description_container}>
-            <Text style={styles.subtitle_text}>Resumé</Text>
-            <Text style={styles.description_text}>{film.overview}</Text>
-          </View>
-        </ScrollView>
+        </Animated.ScrollView >
       );
     }
   }
@@ -320,23 +348,25 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   scrollview_container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: "#fff",
   },
-  image: {
+  image_header_wrapper: {
     height: 169,
     margin: 5
   },
+  image_header: {
+    width: "100%",
+    height: "100%",
+  },
   header_container: {
     marginBottom: 10,
-    paddingHorizontal: 20,
   },
   infos_container: {
     marginBottom: 10,
-    paddingHorizontal: 20,
   },
   description_container: {
     marginBottom: 10,
-    paddingHorizontal: 20,
   },
   title_text: {
     fontWeight: "bold",
