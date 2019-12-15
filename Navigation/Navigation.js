@@ -12,6 +12,8 @@ import FilmDetail from "../Components/FilmDetail";
 import Favorites from "../Components/Favorites";
 import News from "../Components/News";
 import Seen from "../Components/Seen";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const FilmDetailNavigation = {
   screen: FilmDetail,
@@ -70,62 +72,37 @@ const MoviesTabNavigator = createBottomTabNavigator(
     Search: {
       screen: SearchStackNavigator,
       navigationOptions: {
-        tabBarIcon: () => {
-          return (
-            <Image
-              source={require("../Images/ic_search.png")}
-              style={styles.icon}
-            />
-          );
-        }
+        tabBarIcon: ({ tintColor }) => <AntDesign name="search1" size={25} color={tintColor} />
       }
     },
     Favorites: {
       screen: FavoritesStackNavigator,
       navigationOptions: {
-        tabBarIcon: () => {
-          return (
-            <Image
-              source={require("../Images/ic_favorite.png")}
-              style={styles.icon}
-            />
-          );
-        }
+        tabBarIcon: ({ tintColor }) => <AntDesign name="heart" size={25} color={tintColor} />
       }
     },
     News: {
       screen: NewsStackNavigator,
       navigationOptions: {
-        tabBarIcon: () => {
-          return (
-            <Image
-              source={require("../Images/ic_fiber_new.png")}
-              style={styles.icon}
-            />
-          );
-        }
+        tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name="new-box" size={25} color={tintColor} />
       }
     },
     Seen: {
       screen: SeenStackNavigator,
       navigationOptions: {
-        tabBarIcon: () => {
-          return (
-            <Image
-              source={require("../Images/ic_check.png")}
-              style={styles.icon}
-            />
-          );
-        }
+        tabBarIcon: ({ tintColor }) => <AntDesign name={tintColor === "#fff" ? "checkcircle" : "checkcircleo"} size={25} color={tintColor} />
       }
     }
   },
   {
     tabBarOptions: {
-      activeBackgroundColor: "#DDDDDD",
-      inactiveBackgroundColor: "#FFFFFF",
+      activeTintColor: "#fff",
+      inactiveTintColor: "rgba(0, 0, 120, 1)",
       showLabel: false,
-      showIcon: true
+      showIcon: true,
+      style: {
+        backgroundColor: '#0000ff', // TabBar background
+      }
     }
   }
 );

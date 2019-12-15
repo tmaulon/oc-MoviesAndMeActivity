@@ -317,7 +317,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#0000ff",
     color: "#fff",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    elevation: 10,
+    shadowColor: '#000000',
+    shadowOffset: { width: 20, height: 20 },
+    shadowOpacity: 0.75,
+    shadowRadius: 10,
   },
   seen_touchable_fixedactionbutton_text: {
     color: "#fff"
