@@ -165,7 +165,11 @@ class FilmDetail extends React.Component {
   }
 
   _displayFilm() {
-    const { film } = this.state;
+    const { film, scrollOffset } = this.state;
+    const expandedHeaderHeight = 400;
+    const collapsedHeaderHeight = 64;
+    const titleHeight = 44;
+    const scrollSpan = expandedHeaderHeight - collapsedHeaderHeight;
     // Utilisation d'Animated.event pour mettre à jour scrollOffset lors de l'évènement onScroll
     const scrollEvent = Animated.event(
       [{ nativeEvent: { contentOffset: { y: this.state.scrollOffset } } }],
@@ -184,16 +188,82 @@ class FilmDetail extends React.Component {
             // [
             // styles.image_header_wrapper,
             {
-              height: 400,
-              transform: [{ translateY: this.state.scrollOffset }],
-              zIndex: 100, // zIndex est utilisé pour que l'entête soit toujours au dessus du contenu
+              height: expandedHeaderHeight,
+              zIndex: 100,
+              overflow: "hidden",
+              // Déplacement du header vers le haut afin de réduire sa hauteur
+              transform: [
+                {
+                  translateY: Animated.subtract(
+                    scrollOffset,
+                    scrollOffset.interpolate({
+                      inputRange: [0, scrollSpan],
+                      outputRange: [0, scrollSpan],
+                      extrapolate: "clamp",
+                    })
+                  ),
+                },
+              ],
             }
             // ]
           }>
-            <Image
-              style={styles.image_header}
+            <Animated.Image
+              style={
+                [
+                  styles.image_header,
+                  {
+                    transform: [
+                      {
+                        translateY: scrollOffset.interpolate({
+                          inputRange: [0, scrollSpan],
+                          outputRange: [0, scrollSpan / 2],
+                          extrapolate: "clamp",
+                        }),
+                      },
+                    ],
+                  }
+                ]
+              }
               source={{ uri: getImageFromApi(film.backdrop_path) }}
             />
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFill,
+                {
+                  backgroundColor: "black",
+                  // Apparition d'un overlay noir semi-transparent
+                  opacity: scrollOffset.interpolate({
+                    inputRange: [scrollSpan / 2, scrollSpan],
+                    outputRange: [0, 0.85],
+                    extrapolate: "clamp",
+                  }),
+                },
+              ]}
+            />
+            <Animated.Text
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 16,
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+                color: "white",
+                // Déplacement du titre vers le haut afin de le faire apparaitre progressivement
+                transform: [
+                  {
+                    translateY: scrollOffset.interpolate({
+                      inputRange: [scrollSpan, scrollSpan + titleHeight],
+                      outputRange: [titleHeight, 0],
+                      extrapolate: "clamp",
+                    }),
+                  },
+                ],
+              }}
+            >
+              {film.title}
+            </Animated.Text>
           </Animated.View>
           <View style={{ padding: 20 }}>
             <View style={styles.header_container}>
@@ -389,6 +459,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     flex: 1,
+    marginTop: 30,
+    marginBottom: 10,
   },
   header_button_container: {
     flexDirection: "row",
