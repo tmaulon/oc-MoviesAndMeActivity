@@ -1,10 +1,13 @@
 // Navigation/Navigations.js
 
 import React from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, View, Text } from "react-native";
 import {
   createStackNavigator,
   createBottomTabNavigator,
+  ScrollView,
+  createDrawerNavigator,
+  SafeAreaView,
   createAppContainer
 } from "react-navigation";
 import Search from "../Components/Search";
@@ -30,7 +33,7 @@ const FilmDetailNavigation = {
     },
   }
 }
-const HeaderNavigation = (screenName, navigationOptionsTitle) => (
+const MoviesHeaderNavigation = (screenName, navigationOptionsTitle) => (
   {
     screen: screenName,
     navigationOptions: {
@@ -48,22 +51,22 @@ const HeaderNavigation = (screenName, navigationOptionsTitle) => (
   }
 );
 const SearchStackNavigator = createStackNavigator({
-  Search: HeaderNavigation(Search, "Movies and Me"),
+  Search: MoviesHeaderNavigation(Search, "Movies and Me"),
   FilmDetail: FilmDetailNavigation,
 });
 
 const FavoritesStackNavigator = createStackNavigator({
-  Favorites: HeaderNavigation(Favorites, "Mes Films Favoris"),
+  Favorites: MoviesHeaderNavigation(Favorites, "Mes Films Favoris"),
   FilmDetail: FilmDetailNavigation,
 });
 
 const NewsStackNavigator = createStackNavigator({
-  News: HeaderNavigation(News, "Les Derniers Films"),
+  News: MoviesHeaderNavigation(News, "Les Derniers Films"),
   FilmDetail: FilmDetailNavigation,
 });
 
 const SeenStackNavigator = createStackNavigator({
-  Seen: HeaderNavigation(Seen, "Mes Films Vus"),
+  Seen: MoviesHeaderNavigation(Seen, "Mes Films Vus"),
   FilmDetail: FilmDetailNavigation,
 });
 
@@ -106,6 +109,38 @@ const MoviesTabNavigator = createBottomTabNavigator(
     }
   }
 );
+
+const CustomDrawerComponent = props => (
+  <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ height: 150, backgroundColor: '#0000ff', padding: 15, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ color: '#fff', fontSize: 16 }}>Menu</Text>
+    </View>
+    <ScrollView>
+      <DrawerItems {...props} />
+    </ScrollView>
+  </SafeAreaView>
+);
+const MoviesDrawerNavigation = createDrawerNavigator(
+  {
+    Search: {
+      screen: SearchStackNavigator
+    },
+    Favorites: {
+      screen: SearchStackNavigator
+    },
+    News: {
+      screen: SearchStackNavigator
+    },
+    Seen: {
+      screen: SearchStackNavigator
+    },
+  },
+  {
+    drawerWidth: 300,
+    contentComponent: CustomDrawerComponent
+  }
+);
+const AppDrawer = createAppContainer(MoviesDrawerNavigation);
 
 const styles = StyleSheet.create({
   icon: {
